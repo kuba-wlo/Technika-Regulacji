@@ -60,8 +60,20 @@ f_imp_an = (1/3)*np.exp(-2*t) \
 # WYKRESY
 plt.figure(figsize=(10, 8))
 
-# Podwykres 1: Odpowiedź skokowa
+# Podwykres 1: Odpowiedź impulsowa
 plt.subplot(2, 1, 1)
+plt.plot(t, sol_imp_num, 'm', label="Rozwiązanie ODE")
+plt.plot(t, f_imp_an, 'r--', label="Rozwiązanie analityczne")
+plt.title("Odpowiedź impulsowa systemu")
+plt.xlabel("t")
+plt.ylabel("y(t)")
+plt.grid()
+plt.legend()
+plt.xlim(0, 5)
+
+
+# Podwykres 2: Odpowiedź skokowa
+plt.subplot(2, 1, 2)
 plt.plot(t, sol_skok_num, 'g', label="Rozwiązanie ODE")
 plt.plot(t, f_skok_an, 'k--', label="Rozwiązanie analityczne")
 plt.title("Odpowiedź skokowa systemu")
@@ -71,16 +83,6 @@ plt.grid()
 plt.legend()
 plt.xlim(0, 5)
 
-# Podwykres 2: Odpowiedź impulsowa
-plt.subplot(2, 1, 2)
-plt.plot(t, sol_imp_num, 'm', label="Rozwiązanie ODE")
-plt.plot(t, f_imp_an, 'r--', label="Rozwiązanie analityczne")
-plt.title("Odpowiedź impulsowa systemu")
-plt.xlabel("t")
-plt.ylabel("y(t)")
-plt.grid()
-plt.legend()
-plt.xlim(0, 5)
 
 plt.tight_layout()
 plt.show()

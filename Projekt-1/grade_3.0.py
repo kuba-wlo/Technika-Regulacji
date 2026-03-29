@@ -47,8 +47,8 @@ plt.plot(t, f, label="Rozwiązanie analityczne", linestyle='--')
 
 plt.xlabel("t")
 plt.ylabel("y(t)")
-plt.title("Porównanie rozwiązania ODE i analitycznego (3 rząd)")
 plt.grid()
 plt.legend()
+plt.xlim(0, 6)
 
 plt.show()

@@ -36,12 +36,13 @@ sol_3 = odeint(dydt_system, u0_3, t)[:, 0]
 sol_4 = odeint(dydt_system, u0_4, t)[:, 0]
 
 
-# ROZWIĄZANIE ANALITYCZNE (Przykładowe wzory wyliczone wcześniej)
-# Dla u0_1 (zerowe):
-f_an_1 = (1/30) - (1/6)*np.exp(-2*t) + (1/6)*np.exp(-3*t) - (1/30)*np.exp(-5*t)
+# ROZWIĄZANIE ANALITYCZNE
 
-# Dla u0_2 (y0=0.1):
-f_an_2 = 0.0333 + 0.1167*np.exp(-2*t) - 0.1*np.exp(-3*t) + 0.05*np.exp(-5*t)
+f_an_2 = 1/30 + 2/30*np.exp(-5*t) - 1/3*np.exp(-3*t) + 1/3*np.exp(-2*t)
+
+f_an_3 = 1/30 + 23/60*np.exp(-5*t) - 19/12*np.exp(-3*t) + 7/6*np.exp(-2*t)
+
+f_an_4 = 1/30 + 2/15*np.exp(-5*t) - 1/3*np.exp(-3*t) + 1/6*np.exp(-2*t)
 
 
 # WYKRESY
@@ -49,10 +50,10 @@ plt.figure(figsize=(12, 10))
 
 # Podwykres 1: Wszystkie przypadki symulacji
 plt.subplot(2, 1, 1)
-plt.plot(t, sol_1, label="WP: [0, 0, 0]")
-plt.plot(t, sol_2, label="WP: [0.1, 0, 0]")
-plt.plot(t, sol_3, label="WP: [0, 0.5, 0]")
-plt.plot(t, sol_4, label="WP: [0, 0, 1.0]")
+plt.plot(t, sol_1, label="Zerowe")
+plt.plot(t, sol_2, label="y(0)=0.1")
+plt.plot(t, sol_3, label="y'(0)=0.5")
+plt.plot(t, sol_4, label="y''(0)=1.0")
 plt.title("Wpływ poszczególnych warunków początkowych na odpowiedź skokową")
 plt.xlabel("t")
 plt.ylabel("y(t)")
@@ -60,10 +61,14 @@ plt.grid()
 plt.legend()
 plt.xlim(0, 5)
 
-# Podwykres 2: Weryfikacja analityczna dla wybranego przypadku (np. y0=0.1)
+# Podwykres 2: Weryfikacja analityczna dla wszystkich przypadków
 plt.subplot(2, 1, 2)
 plt.plot(t, sol_2, 'b', label="Symulacja ODE (y0=0.1)")
 plt.plot(t, f_an_2, 'r--', label="Wzór analityczny (y0=0.1)")
+plt.plot(t, sol_3, 'c', label="Symulacja ODE (y'(0)=0.5)")
+plt.plot(t, f_an_3, 'g--', label="Wzór analityczny (y'(0)=0.5)")
+plt.plot(t, sol_4, 'm', label="Symulacja ODE (y''(0)=1.0)")
+plt.plot(t, f_an_4, 'k--', label="Wzór analityczny (y''(0)=1.0)")
 plt.title("Porównanie symulacji z wyliczonym wzorem")
 plt.xlabel("t")
 plt.ylabel("y(t)")
