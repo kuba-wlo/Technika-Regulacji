@@ -38,7 +38,7 @@ sol_4 = odeint(dydt_system, u0_4, t)[:, 0]
 
 # ROZWIĄZANIE ANALITYCZNE
 
-f_an_2 = 1/30 + 2/30*np.exp(-5*t) - 1/3*np.exp(-3*t) + 1/3*np.exp(-2*t)
+f_an_2 = 1/30 + 1/15*np.exp(-5*t) - 1/3*np.exp(-3*t) + 1/3*np.exp(-2*t)
 
 f_an_3 = 1/30 + 23/60*np.exp(-5*t) - 19/12*np.exp(-3*t) + 7/6*np.exp(-2*t)
 
