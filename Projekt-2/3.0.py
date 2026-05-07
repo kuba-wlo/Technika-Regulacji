@@ -101,8 +101,7 @@ def main() -> None:
     t1, y1 = step_response(num_open, den_open)
     t2, y2 = step_response(num_closed, den_closed)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-
+    fig1, ax1 = plt.subplots(figsize=(8, 5))
     ax1.plot(t1, y1, lw=2, color="#2b83ba", label="odpowiedź skokowa")
     ax1.axhline(
         kss_open,
@@ -116,7 +115,10 @@ def main() -> None:
     ax1.set_ylabel("y(t)")
     ax1.grid(True, ls="--", alpha=0.6)
     ax1.legend()
+    fig1.tight_layout()
+    plt.show()
 
+    fig2, ax2 = plt.subplots(figsize=(8, 5))
     ax2.plot(t2, y2, lw=2, color="#1a9850", label="odpowiedź skokowa")
     ax2.axhline(
         kss_closed,
@@ -130,8 +132,7 @@ def main() -> None:
     ax2.set_ylabel("y(t)")
     ax2.grid(True, ls="--", alpha=0.6)
     ax2.legend()
-
-    plt.tight_layout()
+    fig2.tight_layout()
     plt.show()
 
 

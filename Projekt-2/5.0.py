@@ -9,6 +9,7 @@ b = 53.0
 c = 102.0
 d = 72.0
 k0 = 12.0
+KS = np.array([-60.0, 0.0, 12.0, 50.0, 150.0, 300.0, 327.0], dtype=float)
 
 
 def p_jw(w: np.ndarray) -> np.ndarray:
@@ -46,25 +47,26 @@ def step_closed(k: float) -> tuple[np.ndarray, np.ndarray]:
     return t, y
 
 
-def nyquist_plots(k: float) -> None:
+def nyquist_plot_single(k: float) -> None:
     w = np.linspace(0.0, 60.0, 12000)
     k_jw = k_otw_jw(w, k)
     phi = np.unwrap(np.angle(1.0 + k_jw))
+    status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
+    style = "-" if is_stable_closed(k) else "--"
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-
-    ax1.plot(k_jw.real, k_jw.imag, color="#2b83ba", lw=2, label=r"$K_{otw}(j\omega)$")
+    ax1.plot(k_jw.real, k_jw.imag, lw=2, ls=style, color="#2b83ba", label=f"k={k:.2f} ({status})")
     ax1.axhline(0.0, color="black")
     ax1.axvline(0.0, color="black")
-    ax1.set_title("Wykres Nyquista")
+    ax1.set_title(f"Wykres Nyquista (k={k:.2f})")
     ax1.set_xlabel("Re")
     ax1.set_ylabel("Im")
     ax1.grid(True, ls="--", alpha=0.6)
     ax1.legend()
 
-    ax2.plot(w, phi, color="#1a9850", lw=2, label=r"$\Delta arg[1 + K_{otw}(j\omega)]$")
+    ax2.plot(w, phi, lw=2, ls=style, color="#1a9850", label=r"$\Delta arg[1 + K_{otw}(j\omega)]$")
     ax2.axhline(0.0, color="red", ls="--", label="Granica stabilnosci (0 rad)")
-    ax2.set_title("Zmiana argumentu funkcji 1 + K_otw(jw)")
+    ax2.set_title(f"Zmiana argumentu 1 + K_otw(jw) (k={k:.2f})")
     ax2.set_xlabel(r"$\omega$")
     ax2.set_ylabel("Kat [rad]")
     ax2.grid(True, ls="--", alpha=0.6)
@@ -73,8 +75,33 @@ def nyquist_plots(k: float) -> None:
     plt.tight_layout()
     plt.show()
 
-    print(f"Nyquist: calkowita zmiana kata = {phi[-1]:.6f} rad")
-    print(f"Stabilnosc ukladu zamknietego dla k={k:.2f}: {is_stable_closed(k)}")
+    print(f"Nyquist: k={k:.2f}, Delta arg = {phi[-1]:.6f} rad, stabilny={is_stable_closed(k)}")
+
+
+def nyquist_plot_all_ks(ks: np.ndarray) -> None:
+    w = np.linspace(0.0, 60.0, 12000)
+    plt.figure(figsize=(12, 6))
+    for k in ks:
+        k_jw = k_otw_jw(w, k)
+        style = "-" if is_stable_closed(k) else "--"
+        status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
+        plt.plot(k_jw.real, k_jw.imag, lw=2, ls=style, label=f"k={k:.2f} ({status})")
+
+    plt.axhline(0.0, color="black")
+    plt.axvline(0.0, color="black")
+    plt.title("Nyquisty dla k uzytych na wykresie odpowiedzi skokowej")
+    plt.xlabel("Re")
+    plt.ylabel("Im")
+    plt.grid(True, ls="--", alpha=0.6)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+    print("\nNyquist dla k z listy:")
+    for k in ks:
+        k_jw = k_otw_jw(w, k)
+        phi = np.unwrap(np.angle(1.0 + k_jw))
+        print(f"k={k:.2f} -> Delta arg = {phi[-1]:.6f} rad, stabilny={is_stable_closed(k)}")
 
 
 def k_impact_step_plot() -> None:
@@ -82,7 +109,7 @@ def k_impact_step_plot() -> None:
     print("\nZakres stabilnosci ukladu zamknietego:")
     print(f"{k_min:.6f} < k < {k_max:.6f}")
 
-    ks = np.array([-60.0, 0.0, 12.0, 50.0, 150.0, 300.0, 327.0], dtype=float)
+    ks = KS
 
     # Zakres Y z przebiegow stabilnych (zostawiamy czytelny wykres porownawczy)
     y_stable = []
@@ -125,8 +152,9 @@ def k_impact_step_plot() -> None:
 
 
 def main() -> None:
-    nyquist_plots(k0)
+    nyquist_plot_single(k0)
     k_impact_step_plot()
+    nyquist_plot_all_ks(KS)
 
 
 if __name__ == "__main__":
