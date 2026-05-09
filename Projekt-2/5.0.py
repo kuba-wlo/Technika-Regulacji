@@ -54,8 +54,9 @@ def nyquist_plot_single(k: float) -> None:
     status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
     style = "-" if is_stable_closed(k) else "--"
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    fig1, ax1 = plt.subplots(figsize=(8, 6))
     ax1.plot(k_jw.real, k_jw.imag, lw=2, ls=style, color="#2b83ba", label=f"k={k:.2f} ({status})")
+    ax1.scatter([-1.0], [0.0], color="red", marker="x", s=80, zorder=5, label="punkt krytyczny (-1, 0)")
     ax1.axhline(0.0, color="black")
     ax1.axvline(0.0, color="black")
     ax1.set_title(f"Wykres Nyquista (k={k:.2f})")
@@ -63,7 +64,10 @@ def nyquist_plot_single(k: float) -> None:
     ax1.set_ylabel("Im")
     ax1.grid(True, ls="--", alpha=0.6)
     ax1.legend()
+    fig1.tight_layout()
+    plt.show()
 
+    fig2, ax2 = plt.subplots(figsize=(8, 6))
     ax2.plot(w, phi, lw=2, ls=style, color="#1a9850", label=r"$\Delta arg[1 + K_{otw}(j\omega)]$")
     ax2.axhline(0.0, color="red", ls="--", label="Granica stabilnosci (0 rad)")
     ax2.set_title(f"Zmiana argumentu 1 + K_otw(jw) (k={k:.2f})")
@@ -71,8 +75,7 @@ def nyquist_plot_single(k: float) -> None:
     ax2.set_ylabel("Kat [rad]")
     ax2.grid(True, ls="--", alpha=0.6)
     ax2.legend()
-
-    plt.tight_layout()
+    fig2.tight_layout()
     plt.show()
 
     print(f"Nyquist: k={k:.2f}, Delta arg = {phi[-1]:.6f} rad, stabilny={is_stable_closed(k)}")
@@ -87,6 +90,7 @@ def nyquist_plot_all_ks(ks: np.ndarray) -> None:
         status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
         plt.plot(k_jw.real, k_jw.imag, lw=2, ls=style, label=f"k={k:.2f} ({status})")
 
+    plt.scatter([-1.0], [0.0], color="red", marker="x", s=80, zorder=5, label="punkt krytyczny (-1, 0)")
     plt.axhline(0.0, color="black")
     plt.axvline(0.0, color="black")
     plt.title("Nyquisty dla k uzytych na wykresie odpowiedzi skokowej")

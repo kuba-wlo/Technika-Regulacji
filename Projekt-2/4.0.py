@@ -88,8 +88,7 @@ def main() -> None:
     M = mikhailov_M_jw(w, a, b, c, d)
     phi = np.unwrap(np.angle(M))
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-
+    fig1, ax1 = plt.subplots(figsize=(8, 6))
     mask = w <= 12.0
     ax1.plot(M[mask].real, M[mask].imag, color="#2b83ba", lw=2, label=r"$M(j\omega)$")
     ax1.scatter(M[0].real, M[0].imag, color="red", zorder=3, label=r"$\omega=0$")
@@ -100,7 +99,10 @@ def main() -> None:
     ax1.set_ylabel("Im")
     ax1.grid(True, ls="--", alpha=0.6)
     ax1.legend()
+    fig1.tight_layout()
+    plt.show()
 
+    fig2, ax2 = plt.subplots(figsize=(8, 6))
     ax2.plot(w, phi, color="#1a9850", lw=2, label=r"$\arg M(j\omega)$")
     ax2.axhline(2.0 * np.pi, color="red", ls="--", label=r"Cel (stabilny rząd 4): $2\pi$")
     ax2.set_title("Zmiana argumentu funkcji")
@@ -108,8 +110,7 @@ def main() -> None:
     ax2.set_ylabel("Kąt [rad]")
     ax2.grid(True, ls="--", alpha=0.6)
     ax2.legend()
-
-    plt.tight_layout()
+    fig2.tight_layout()
     plt.show()
 
     print("=== Michajlow (uklad otwarty) ===")
@@ -140,7 +141,7 @@ def main() -> None:
         dtype=float,
     )
 
-    fig2, ax = plt.subplots(1, 1, figsize=(12, 6))
+    fig3, ax = plt.subplots(figsize=(12, 6))
     for k in ks:
         t, y = step_response_open(a, b, c, d, k)
         ax.plot(t, y, lw=2, label=f"k={k:.2f}  (k/d={k/d:.3f})")
