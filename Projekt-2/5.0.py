@@ -51,11 +51,10 @@ def nyquist_plot_single(k: float) -> None:
     w = np.linspace(0.0, 60.0, 12000)
     k_jw = k_otw_jw(w, k)
     phi = np.unwrap(np.angle(1.0 + k_jw))
-    status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
     style = "-" if is_stable_closed(k) else "--"
 
     fig1, ax1 = plt.subplots(figsize=(8, 6))
-    ax1.plot(k_jw.real, k_jw.imag, lw=2, ls=style, color="#2b83ba", label=f"k={k:.2f} ({status})")
+    ax1.plot(k_jw.real, k_jw.imag, lw=2, ls=style, color="#2b83ba", label=f"k={k:.2f}")
     ax1.axhline(0.0, color="black")
     ax1.axvline(0.0, color="black")
     ax1.set_title(f"Wykres Nyquista (k={k:.2f})")
@@ -72,8 +71,6 @@ def nyquist_plot_single(k: float) -> None:
     ax2.set_title(f"Zmiana argumentu 1 + K_otw(jw)")
     ax2.set_xlabel(r"$\omega$")
     ax2.set_ylabel("Kat [rad]")
-    ax2.set_xlim(left=0.0)
-    ax2.margins(x=0)
     ax2.grid(True, ls="--", alpha=0.6)
     ax2.legend()
     fig2.tight_layout()
@@ -88,8 +85,7 @@ def nyquist_plot_all_ks(ks: np.ndarray) -> None:
     for k in ks:
         k_jw = k_otw_jw(w, k)
         style = "-" if is_stable_closed(k) else "--"
-        status = "stabilny" if is_stable_closed(k) else "NIEstabilny"
-        plt.plot(k_jw.real, k_jw.imag, lw=2, ls=style, label=f"k={k:.2f} ({status})")
+        plt.plot(k_jw.real, k_jw.imag, lw=2, ls=style, label=f"k={k:.2f}")
 
     plt.scatter([-1.0], [0.0], color="red", marker="x", s=80, zorder=5, label="punkt krytyczny (-1, 0)")
     plt.axhline(0.0, color="black")
@@ -137,12 +133,12 @@ def k_impact_step_plot() -> None:
     for k in ks:
         t, y = step_closed(k)
         if is_stable_closed(k):
-            plt.plot(t, y, lw=2, label=f"k={k:.2f} (stabilny)")
+            plt.plot(t, y, lw=2, label=f"k={k:.2f}")
         else:
             den = np.array([1.0, a, b, c, d + k], dtype=float)
             poles = np.roots(den)
             y_clip = np.clip(y, y_lo, y_hi)
-            plt.plot(t, y_clip, lw=2, ls="--", label=f"k={k:.2f} (NIEstabilny, przyciety)")
+            plt.plot(t, y_clip, lw=2, ls="--", label=f"k={k:.2f}")
             print(f"k={k:.2f} -> NIEstabilny, bieguny: {np.array2string(poles, precision=3)}")
 
     plt.title("Wplyw parametru k na odpowiedz skokowa (uklad zamkniety)")
