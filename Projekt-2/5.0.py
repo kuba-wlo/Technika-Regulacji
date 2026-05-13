@@ -9,7 +9,7 @@ b = 53.0
 c = 102.0
 d = 72.0
 k0 = 12.0
-KS = np.array([-60.0, 0.0, 12.0, 50.0, 150.0, 300.0, 327.0], dtype=float)
+KS = np.array([-60.0, 0.0, 12.0, 50.0, 150.0, 300.0, 307.0], dtype=float)
 
 
 def p_jw(w: np.ndarray) -> np.ndarray:
